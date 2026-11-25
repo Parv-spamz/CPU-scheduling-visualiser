@@ -1,0 +1,99 @@
+/* Scene styling (WP-B). Sizes are SVG user units (world units), colours come from theme.css. */
+
+.scene text { font-family: var(--font-sans); fill: var(--text); pointer-events: none; }
+.scene .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ---- PCB ---- */
+.pcb { fill: var(--board); stroke: var(--board-edge); stroke-width: 2; }
+.pcb-grid-line { fill: none; stroke: var(--silk); stroke-opacity: 0.05; stroke-width: 0.6; }
+.pcb-grid-dot { fill: var(--silk); fill-opacity: 0.12; }
+.pcb-hole { fill: var(--bg); stroke: var(--copper-dim); stroke-width: 3; }
+.silk { fill: var(--silk); fill-opacity: 0.75; font-size: 11px; letter-spacing: 0.08em; }
+.silk-dim { fill: var(--silk); fill-opacity: 0.45; font-size: 9px; letter-spacing: 0.06em; }
+.silk-line { fill: none; stroke: var(--silk); stroke-opacity: 0.35; stroke-width: 1; }
+
+/* ---- Power block ---- */
+.vrm { fill: #0c3326; stroke: var(--silk); stroke-opacity: 0.3; stroke-width: 1; stroke-dasharray: 4 3; }
+.cap-body { fill: #1b2a33; stroke: #6d8594; stroke-width: 1.5; }
+.cap-top { fill: none; stroke: #9fb5c2; stroke-width: 1.2; stroke-opacity: 0.7; }
+.choke { fill: #232b30; stroke: #4c5a62; stroke-width: 1.2; }
+.choke-coil { fill: none; stroke: var(--copper); stroke-opacity: 0.55; stroke-width: 1.2; }
+.power-rail { fill: none; stroke: var(--copper-dim); stroke-width: 10; stroke-linejoin: round; stroke-opacity: 0.55; }
+
+/* ---- Traces ---- */
+.trace { fill: none; stroke: var(--copper-dim); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.trace-hi { fill: none; stroke: var(--copper); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; opacity: 0.45; }
+.trace-breathe { animation: mb-breathe 4.5s ease-in-out infinite; }
+.via { fill: var(--board); stroke: var(--copper); stroke-width: 2; }
+.pulse { fill: var(--neon); filter: drop-shadow(0 0 4px var(--neon)); pointer-events: none; }
+
+@keyframes mb-breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+
+/* ---- Storage bay ---- */
+.bay { fill: #0b1d18; stroke: var(--silk); stroke-opacity: 0.4; stroke-width: 1.5; }
+.bay-cell { fill: #08150f; stroke: var(--silk); stroke-opacity: 0.12; stroke-width: 1; }
+.bay-connector { fill: #c9a24a; fill-opacity: 0.7; }
+
+/* ---- RAM ---- */
+.dimm { fill: #0d1b24; stroke: #2a4656; stroke-width: 1.5; }
+.ram-slot { fill: #08121a; stroke: #2a4656; stroke-width: 1; }
+.ram-slot-front { stroke: var(--neon); stroke-opacity: 0.45; }
+.ram-contact { fill: #c9a24a; fill-opacity: 0.6; }
+
+/* ---- CPU ---- */
+.socket { fill: var(--socket); stroke: #3a4b58; stroke-width: 2; }
+.socket-pin { fill: #c9a24a; fill-opacity: 0.35; }
+.die { fill: var(--die); stroke: var(--die-edge); stroke-width: 2; }
+.cache { fill: #142430; stroke: #2f4858; stroke-width: 1; }
+.cache-line { stroke: #2f4858; stroke-width: 0.8; }
+.sched { fill: #0c1c26; stroke: var(--neon); stroke-opacity: 0.35; stroke-width: 1; }
+.sched-flash { fill: var(--neon); pointer-events: none; }
+.sched-title { font-size: 10px; letter-spacing: 0.1em; fill: var(--neon); }
+.sched-note { font-size: 8.5px; fill: var(--text-dim); }
+
+/* ---- Core ---- */
+.core { fill: #0b141b; stroke: var(--neon); stroke-opacity: 0.55; stroke-width: 1.5; cursor: zoom-in; }
+.core-grid { stroke: var(--neon); stroke-opacity: 0.07; stroke-width: 0.6; }
+.core-label { font-size: 8px; letter-spacing: 0.12em; fill: var(--neon); fill-opacity: 0.7; }
+.core-overlay { pointer-events: none; }
+.core-idle-text { font-size: 11px; letter-spacing: 0.2em; fill: var(--text-dim); }
+.ring-track { fill: none; stroke: #ffffff; stroke-opacity: 0.08; }
+.ring-progress { fill: none; stroke: var(--ok); stroke-linecap: round; }
+.ring-quantum { fill: none; stroke: var(--neon); stroke-linecap: round; stroke-opacity: 0.8; }
+.cpu-hit { cursor: zoom-in; }
+
+/* ---- Output port ---- */
+.port { fill: #10202a; stroke: var(--ok); stroke-opacity: 0.45; stroke-width: 1.5; }
+.port-arrow { fill: none; stroke: var(--ok); stroke-opacity: 0.6; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- Readouts ---- */
+.readout { fill: #050c0a; stroke: var(--silk); stroke-opacity: 0.3; stroke-width: 1; }
+.readout-label { font-size: 8px; letter-spacing: 0.16em; fill: var(--text-dim); }
+.readout-value { font-size: 19px; fill: var(--neon); }
+
+/* ---- Gantt ---- */
+.gantt-frame { fill: #050c0a; stroke: var(--silk); stroke-opacity: 0.3; stroke-width: 1; }
+.gantt-lane { fill: #08120f; }
+.gantt-grid { stroke: var(--silk); stroke-opacity: 0.1; stroke-width: 0.8; }
+.gantt-tick { font-size: 9px; fill: var(--text-dim); }
+.gantt-seg { stroke: #04110d; stroke-width: 1; }
+.gantt-seg:hover { stroke: var(--text); }
+.gantt-idle-hatch { stroke: var(--text-dim); stroke-opacity: 0.4; stroke-width: 1.5; }
+.gantt-cursor { stroke: var(--text); stroke-width: 1.2; stroke-opacity: 0.85; pointer-events: none; }
+
+/* ---- Chips ---- */
+.chip-body { stroke: rgba(0, 0, 0, 0.35); stroke-width: 1; }
+.chip-body-best { stroke: #ffffff; stroke-width: 2; }
+.chip-pin { stroke: #b9c4c9; stroke-width: 2; }
+.chip-notch { fill: rgba(0, 0, 0, 0.3); }
+.chip-name { font-size: 12px; font-weight: 700; fill: #04110d; }
+.chip-badge { fill: #04110d; stroke: currentColor; stroke-width: 1.2; }
+.chip-badge-text { font-size: 8px; font-weight: 700; }
+.chip-remaining { font-size: 8px; font-weight: 700; fill: #04110d; fill-opacity: 0.75; }
+.chip-flash { fill: var(--warn); pointer-events: none; }
+.chip-check-disc { fill: var(--ok); }
+.chip-check-mark { fill: none; stroke: #04110d; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trace-breathe { animation: none; opacity: 0.45; }
+}
