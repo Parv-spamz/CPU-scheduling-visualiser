@@ -10,7 +10,7 @@ import type { Place } from '../player/keyframes';
 import { chipFrameAt, remainingAt, restingPlaceAt } from '../player/sceneState';
 import { CPU_STACK, FONT_SIZE, H, U, toX, toZ } from './space';
 import { FONTS } from './fonts';
-import { COLORS, damp } from './materials';
+import { COLORS, damp, radialGlowTexture } from './materials';
 
 const DEPTH = CHIP_HEIGHT * U;
 const PIN_PITCH = 0.05;
@@ -56,6 +56,7 @@ function Chip({ process: p, remaining }: ChipProps) {
   const pins = useRef<THREE.InstancedMesh>(null);
   const name = useRef<TextMesh>(null);
   const detail = useRef<TextMesh>(null);
+  const shadow = useRef<THREE.MeshBasicMaterial>(null);
   const camera = useThree((s) => s.camera);
   const setTooltip = useApp((s) => s.setTooltip);
   const selectPid = useApp((s) => s.selectPid);
@@ -100,6 +101,9 @@ function Chip({ process: p, remaining }: ChipProps) {
     g.scale.setScalar(f.pose.scale);
     // A little banking while travelling.
     g.rotation.z = f.move ? Math.sin(Math.PI * f.u) * 0.08 : 0;
+
+    // Contact shadow: strongest when resting, fades while the chip is lifted in transit.
+    if (shadow.current) shadow.current.opacity = op * 0.55 * (f.move ? 1 - Math.sin(Math.PI * f.u) * 0.8 : 1);
 
     const transparent = op < 0.999;
     for (const m of [body.current, stripe.current, pinsMat.current]) {
@@ -152,7 +156,11 @@ function Chip({ process: p, remaining }: ChipProps) {
 
   return (
     <group ref={group} onPointerOver={onOver} onPointerOut={onOut} onClick={onClick}>
-      <RoundedBox args={[w, H.chip, DEPTH]} radius={0.012} smoothness={3} castShadow receiveShadow>
+      <mesh position={[0, -H.chip / 2 + 0.002, 0]} rotation-x={-Math.PI / 2} renderOrder={1}>
+        <planeGeometry args={[w * 1.5, DEPTH * 2.4]} />
+        <meshBasicMaterial ref={shadow} map={radialGlowTexture()} color="#000000" transparent opacity={0.55} depthWrite={false} />
+      </mesh>
+      <RoundedBox args={[w, H.chip, DEPTH]} radius={0.012} smoothness={3} receiveShadow>
         <meshPhysicalMaterial ref={body} color="#121314" roughness={0.38} clearcoat={0.5} clearcoatRoughness={0.35} />
       </RoundedBox>
       {/* Colour stripe along the leading edge: the process's identity everywhere it goes. */}
@@ -164,7 +172,7 @@ function Chip({ process: p, remaining }: ChipProps) {
         <circleGeometry args={[0.018, 16]} />
         <meshBasicMaterial ref={led} toneMapped={false} transparent />
       </mesh>
-      <instancedMesh ref={pins} args={[undefined, undefined, pinCount * 2]} castShadow>
+      <instancedMesh ref={pins} args={[undefined, undefined, pinCount * 2]}>
         <boxGeometry args={[0.018, 0.02, 0.036]} />
         <meshStandardMaterial ref={pinsMat} color="#d9b25e" metalness={1} roughness={0.25} />
       </instancedMesh>

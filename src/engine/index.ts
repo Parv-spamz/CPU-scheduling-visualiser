@@ -6,3 +6,5 @@ export { presets } from './presets';
 export type { Preset } from './presets';
 export { randomWorkload } from './random';
 export { toCsv } from './csv';
+export { quantumSweep } from './sweep';
+export type { SweepOutcome, SweepPoint, SweepResult } from './sweep';

@@ -25,6 +25,8 @@ function boardShape(): THREE.Shape {
   return s;
 }
 
+const BEVEL = 0.01;
+
 function rng(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
@@ -139,9 +141,10 @@ export default function Pcb() {
   }, [shape]);
 
   const edge = useMemo(() => {
-    const g = new THREE.ExtrudeGeometry(shape, { depth: H.pcb, bevelEnabled: true, bevelSize: 0.01, bevelThickness: 0.01, bevelSegments: 2, curveSegments: 12 });
+    const g = new THREE.ExtrudeGeometry(shape, { depth: H.pcb, bevelEnabled: true, bevelSize: BEVEL, bevelThickness: BEVEL, bevelSegments: 2, curveSegments: 12 });
     g.rotateX(-Math.PI / 2);
-    g.translate(0, -H.pcb, 0);
+    // Extrusion spans [-bevel, depth + bevel]; keep its top cap just under the textured surface.
+    g.translate(0, -H.pcb - BEVEL - 0.002, 0);
     return g;
   }, [shape]);
 
@@ -161,9 +164,9 @@ export default function Pcb() {
           bumpMap={maps.bump}
           bumpScale={1.4}
           metalness={0.05}
-          clearcoat={0.55}
-          clearcoatRoughness={0.32}
-          envMapIntensity={0.9}
+          clearcoat={0.4}
+          clearcoatRoughness={0.38}
+          envMapIntensity={0.7}
         />
       </mesh>
       <SmdParts />

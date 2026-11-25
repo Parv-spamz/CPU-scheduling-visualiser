@@ -253,8 +253,8 @@ function drawPcb(ctx: CanvasRenderingContext2D, mode: Mode, k: number) {
   // Base.
   if (mode === 'color') {
     const grad = ctx.createRadialGradient(CPU_CENTER.x, CPU_CENTER.y, 80, CPU_CENTER.x, CPU_CENTER.y, 1100);
-    grad.addColorStop(0, '#0f4a34');
-    grad.addColorStop(1, '#082a1e');
+    grad.addColorStop(0, '#125238');
+    grad.addColorStop(1, '#0a3324');
     ctx.fillStyle = grad;
   } else ctx.fillStyle = mode === 'rough' ? '#5a5a5a' : '#808080';
   ctx.fillRect(0, 0, WORLD.width, WORLD.height);
@@ -273,13 +273,13 @@ function drawPcb(ctx: CanvasRenderingContext2D, mode: Mode, k: number) {
   ctx.lineJoin = 'round';
   for (const t of R.traces) {
     ctx.lineWidth = t.w;
-    if (mode === 'color') ctx.strokeStyle = t.kind === 'power' ? '#17603f' : t.kind === 'bus' ? '#2a8257' : '#22744c';
+    if (mode === 'color') ctx.strokeStyle = t.kind === 'power' ? '#196343' : t.kind === 'bus' ? '#2b8a5a' : '#21744b';
     else if (mode === 'rough') ctx.strokeStyle = '#444';
     else ctx.strokeStyle = t.kind === 'power' ? '#a0a0a0' : '#b4b4b4';
     strokePath(ctx, t.pts);
     if (mode === 'color' && t.kind !== 'power') {
       ctx.lineWidth = Math.max(0.5, t.w * 0.35);
-      ctx.strokeStyle = 'rgba(160,235,185,0.28)';
+      ctx.strokeStyle = 'rgba(170,240,195,0.24)';
       strokePath(ctx, t.pts);
     }
   }

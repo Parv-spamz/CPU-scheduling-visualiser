@@ -127,10 +127,6 @@ export function traceSlotToCpu(i: number): Point[] {
 }
 export const TRACE_CPU_OUT: Point[] = [CPU_OUT_START, CPU_OUT_END];
 
-export function polylinePoints(pts: Point[]): string {
-  return pts.map((p) => `${p.x},${p.y}`).join(' ');
-}
-
 // ---- Chips ----
 export const CHIP_HEIGHT = 28;
 export const CHIP_RADIUS = 6;
@@ -155,15 +151,10 @@ export const LEVEL_LABEL: Record<Level, string> = { L0: 'Board', L1: 'CPU', L2: 
 
 export const CAMERA = {
   duration: 1.2,
-  ease: 'power3.inOut',
   reducedMotionDuration: 0.35,
   wheelDebounceMs: 400,
 } as const;
 
-export const LOD = { names: 1.3, detail: 3 } as const;
-export function zoomFor(viewBoxWidth: number): number {
-  return WORLD.width / viewBoxWidth;
-}
 
 // ---- Playback ----
 export const PLAYBACK = {

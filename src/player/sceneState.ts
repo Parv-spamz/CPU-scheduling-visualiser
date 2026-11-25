@@ -105,3 +105,10 @@ export function restingPlaceAt(plan: Plan, pid: number, sec: number): ChipMove['
   }
   return place;
 }
+
+/** Timeline length in seconds: the last tick, or later if a final exit animation runs past it. */
+export function planEndSec(plan: Plan): number {
+  let end = (plan.end - plan.t0) * plan.secondsPerTick;
+  for (const moves of plan.moves.values()) for (const m of moves) end = Math.max(end, m.start + m.duration);
+  return end;
+}

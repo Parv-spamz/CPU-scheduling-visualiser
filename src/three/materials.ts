@@ -46,7 +46,7 @@ export function flowMaterial(color: THREE.ColorRepresentation): THREE.ShaderMate
       uTime: { value: 0 },
       uActive: { value: 0 },
       uColor: { value: new THREE.Color(color) },
-      uBase: { value: 0.12 },
+      uBase: { value: 0.22 },
     },
     vertexShader: /* glsl */ `
       attribute float aLen;

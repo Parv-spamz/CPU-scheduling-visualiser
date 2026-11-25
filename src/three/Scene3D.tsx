@@ -1,5 +1,6 @@
-import { Suspense, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { rt } from '../player/runtime';
 import { AdaptiveDpr, Environment, Lightformer, PerformanceMonitor, Preload } from '@react-three/drei';
 import { Bloom, EffectComposer, N8AO, Noise, SMAA, TiltShift2, ToneMapping, Vignette } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
@@ -24,7 +25,7 @@ function Lights() {
   return (
     <>
       <color attach="background" args={['#040807']} />
-      <fog attach="fog" args={['#040807', 30, 60]} />
+      <fog attach="fog" args={['#040807', 45, 110]} />
       <Environment resolution={256} frames={1}>
         <Lightformer intensity={2.4} position={[0, 9, 1]} rotation-x={Math.PI / 2} scale={[16, 9, 1]} color="#f4f8ff" />
         <Lightformer intensity={1.1} position={[-12, 4, 2]} rotation-y={Math.PI / 2} scale={[14, 3, 1]} color="#bfe8ff" />
@@ -40,6 +41,7 @@ function Lights() {
         intensity={2.3}
         color="#fff6ea"
         shadow-mapSize={[2048, 2048]}
+        shadow-radius={4}
         shadow-bias={-0.0003}
         shadow-normalBias={0.02}
         shadow-camera-left={-10}
@@ -52,6 +54,25 @@ function Lights() {
       <directionalLight position={[9, 6, -6]} intensity={0.35} color="#9fdcff" />
     </>
   );
+}
+
+/**
+ * Board shadows are static except while the heat spreader lifts or the results deck rises,
+ * so the shadow map is re-rendered only then (chips use contact shadows instead).
+ */
+function ShadowBaker() {
+  const gl = useThree((s) => s.gl);
+  const last = useRef({ ihs: -1, results: -1, frames: 0 });
+  useFrame(() => {
+    gl.shadowMap.autoUpdate = false;
+    const l = last.current;
+    const moving = Math.abs(rt.ihsLift - l.ihs) > 1e-4 || Math.abs(rt.results - l.results) > 1e-4;
+    if (moving || l.frames < 60) gl.shadowMap.needsUpdate = true;
+    l.ihs = rt.ihsLift;
+    l.results = rt.results;
+    l.frames++;
+  });
+  return null;
 }
 
 function Desk() {
@@ -68,7 +89,7 @@ function Effects({ ao, lens }: { ao: boolean; lens: boolean }) {
     <Bloom key="bloom" mipmapBlur intensity={0.75} luminanceThreshold={0.9} luminanceSmoothing={0.2} radius={0.7} />,
     <SMAA key="smaa" />,
     <Vignette key="vig" offset={0.24} darkness={0.68} />,
-    <ToneMapping key="tm" mode={ToneMappingMode.AGX} />,
+    <ToneMapping key="tm" mode={ToneMappingMode.ACES_FILMIC} />,
     <Noise key="grain" opacity={0.035} premultiply blendFunction={BlendFunction.SOFT_LIGHT} />,
   ];
   // Macro-lens look: soft focus falloff toward the top and bottom of the frame.
@@ -80,9 +101,23 @@ function Effects({ ao, lens }: { ao: boolean; lens: boolean }) {
   );
 }
 
+/** `?fx=0` turns post-processing off (low-power machines, debugging). */
+const FX = typeof location === 'undefined' || new URLSearchParams(location.search).get('fx') !== '0';
+
+/** Signals once the scene has rendered a couple of frames (textures and fonts are in). */
+function Ready({ onReady }: { onReady: () => void }) {
+  const frames = useRef(0);
+  useFrame(() => {
+    frames.current++;
+    if (frames.current === 3) onReady();
+  });
+  return null;
+}
+
 /** The single full-screen 3D motherboard scene. */
 export default function Scene3D() {
   const [ao, setAo] = useState(true);
+  const [ready, setReady] = useState(false);
   const reducedMotion = useApp((s) => s.reducedMotion);
   return (
     <div className="scene" role="group" aria-label="3D motherboard scheduling scene">
@@ -91,12 +126,13 @@ export default function Scene3D() {
         flat
         dpr={[1, 1.75]}
         gl={{ antialias: false, powerPreference: 'high-performance', stencil: false }}
-        camera={{ fov: 32, near: 0.1, far: 120, position: [0, 13, 12] }}
+        camera={{ fov: 32, near: 0.1, far: 220, position: [0, 13, 12] }}
         onPointerMissed={() => useApp.getState().selectPid(null)}
       >
         <PerformanceMonitor onDecline={() => setAo(false)} flipflops={2} />
         <AdaptiveDpr pixelated={false} />
         <Lights />
+        <ShadowBaker />
         <Suspense fallback={null}>
           <Desk />
           <Pcb />
@@ -112,11 +148,16 @@ export default function Scene3D() {
           <Chips />
           <ResultsDeck />
           <Preload all />
+          <Ready onReady={() => setReady(true)} />
         </Suspense>
         <PlayerDriver />
         <CameraRig />
-        <Effects ao={ao} lens={ao && !reducedMotion} />
+        {FX && <Effects ao={ao} lens={ao && !reducedMotion} />}
       </Canvas>
+      <div className="boot" data-ready={ready} aria-hidden={ready}>
+        <div className="boot-chip" />
+        <p>Powering on the board…</p>
+      </div>
     </div>
   );
 }

@@ -65,3 +65,31 @@ html, body, #root {
   white-space: nowrap;
   border: 0;
 }
+
+.boot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  background: radial-gradient(ellipse at center, #0b1a15 0%, #040807 70%);
+  color: var(--text-dim);
+  font: 500 13px/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  transition: opacity 0.9s ease, visibility 0.9s;
+  pointer-events: none;
+}
+.boot[data-ready='true'] { opacity: 0; visibility: hidden; }
+.boot p { margin: 0; }
+.boot-chip {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  border: 2px solid rgba(56, 232, 255, 0.7);
+  box-shadow: 0 0 24px rgba(56, 232, 255, 0.35), inset 0 0 18px rgba(56, 232, 255, 0.25);
+  animation: boot-pulse 1.4s ease-in-out infinite;
+}
+@keyframes boot-pulse {
+  50% { box-shadow: 0 0 40px rgba(56, 232, 255, 0.6), inset 0 0 24px rgba(56, 232, 255, 0.45); }
+}

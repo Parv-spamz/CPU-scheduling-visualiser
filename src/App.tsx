@@ -7,11 +7,13 @@ import Tooltip from './ui/Tooltip';
 import ResultsTable from './ui/ResultsTable';
 import { useKeyboard } from './ui/useKeyboard';
 import { useApp } from './store/useApp';
+import { useShareLink } from './store/useShareLink';
 
 export default function App() {
   const recompute = useApp((s) => s.recompute);
   useEffect(() => recompute(), [recompute]);
   useKeyboard();
+  useShareLink();
   return (
     <>
       <Scene3D />

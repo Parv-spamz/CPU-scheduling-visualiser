@@ -6,6 +6,7 @@ import { ALGORITHMS, ALGORITHM_LABEL, type AlgorithmId, type CompareResult, type
 import { RESULT_PANELS, RESULT_PANEL_SIZE, WORLD } from '../scene/layout';
 import { algorithmExplanation, fmt2, ganttBlocks, modeLabel, ringLabel, sharedTimeAxis } from '../scene/resultsModel';
 import { useApp } from '../store/useApp';
+import { rt } from '../player/runtime';
 import { FONT_SIZE, H, U, at, toZ } from './space';
 import { FONTS } from './fonts';
 import { damp } from './materials';
@@ -226,6 +227,7 @@ export default function ResultsDeck() {
     const target = s.level === 'L3' && s.compare ? 1 : 0;
     progress.current.current = damp(progress.current.current, target, s.reducedMotion ? 14 : 2.6, dt);
     const p = progress.current.current;
+    rt.results = p;
     if (overlay.current) {
       overlay.current.opacity = p * 0.62;
       overlay.current.visible = p > 0.005;

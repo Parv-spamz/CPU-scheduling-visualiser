@@ -11,6 +11,8 @@ const { ACTION } = CameraControlsImpl;
 export const FOV = 32;
 /** Tilt from vertical per level: oblique over the board, steeper over results. */
 const POLAR: Record<Level, number> = { L0: 0.66, L1: 0.74, L2: 0.62, L3: 0.32 };
+/** Breathing room around each level's rectangle (perspective enlarges the near edge). */
+const PAD: Record<Level, number> = { L0: 1.04, L1: 1.16, L2: 1.08, L3: 1.05 };
 const TARGET_Y: Record<Level, number> = { L0: 0, L1: 0.05, L2: CPU_STACK.dieTop, L3: H.resultsFloat * 0.8 };
 
 /** Camera position and look-at target that frame a level's layout rectangle in the window. */
@@ -19,11 +21,14 @@ export function framing(level: Level, aspect: number): { pos: Vec3; target: Vec3
   const target = rectCenter(r, TARGET_Y[level]);
   const polar = POLAR[level];
   const half = Math.tan(((FOV / 2) * Math.PI) / 180);
-  const w = r.width * U;
+  // Narrow / portrait windows frame the active centre of the level instead of its full width
+  // (brief §1: "on narrow screens the camera frames the active area"); the user can orbit or pan.
+  const crop = aspect < 0.9 ? Math.max(level === 'L3' ? 0.62 : 0.45, aspect) : 1;
+  const w = r.width * U * crop;
   const d = r.height * U;
   const dv = (d * Math.cos(polar)) / 2 / half;
   const dh = w / 2 / (half * Math.max(0.2, aspect));
-  const dist = Math.max(dv, dh) * 1.06;
+  const dist = Math.max(dv, dh) * PAD[level];
   return {
     pos: [target[0], target[1] + dist * Math.cos(polar), target[2] + dist * Math.sin(polar)],
     target,

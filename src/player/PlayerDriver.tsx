@@ -4,7 +4,7 @@ import { useApp } from '../store/useApp';
 import { PLAYBACK } from '../scene/layout';
 import { buildPlan, playheadAt, secondsAt, tickAt } from './keyframes';
 import { rt } from './runtime';
-import { loadFromQueue, queueLengthAt } from './sceneState';
+import { loadFromQueue, planEndSec, queueLengthAt } from './sceneState';
 
 const PROGRESS_HZ = 10;
 
@@ -51,7 +51,8 @@ export default function PlayerDriver() {
     const run = rt.run;
     const plan = rt.plan;
     if (!run || !plan) return;
-    const endSec = secondsAt(run, plan.end);
+    const endSec = planEndSec(plan);
+    const finalTick = plan.end;
 
     if (s.seekTo !== null) {
       rt.sec = Math.min(endSec, Math.max(0, secondsAt(run, s.seekTo)));
@@ -71,30 +72,32 @@ export default function PlayerDriver() {
         rt.sec = endSec;
         endReachedAt.current = state.clock.elapsedTime;
         s.pause();
-        s.setProgress(tickAt(run, endSec));
+        s.setProgress(finalTick);
       }
     }
     rt.t = tickAt(run, rt.sec);
+    const tClamped = Math.min(rt.t, finalTick);
 
     // Smoothed CPU pressure for the overload glow.
-    const target = loadFromQueue(queueLengthAt(run, rt.t));
+    const target = loadFromQueue(queueLengthAt(run, tClamped));
     rt.load += (target - rt.load) * Math.min(1, delta * 3);
 
     // Coarse store writes.
-    const tick = Math.floor(rt.t + 1e-6);
+    const tick = Math.floor(tClamped + 1e-6);
     if (tick !== lastTick.current) {
       lastTick.current = tick;
       s.setPlayhead(playheadAt(run, tick));
     }
     const now = state.clock.elapsedTime;
-    if (now - lastProgressAt.current > 1 / PROGRESS_HZ && Math.abs(s.progress - rt.t) > 1e-4) {
+    if (now - lastProgressAt.current > 1 / PROGRESS_HZ && Math.abs(s.progress - tClamped) > 1e-4) {
       lastProgressAt.current = now;
-      s.setProgress(rt.t);
+      s.setProgress(tClamped);
     }
 
     // Auto-follow (brief §8.5). Manual input clears followMode and stops all of this.
     if (!s.followMode) return;
     if (s.playing && s.level === 'L0' && rt.sec >= plan.firstDispatchAt) s.setLevel('L1');
+    if (s.playing && s.level === 'L3') s.setLevel(rt.sec >= plan.firstDispatchAt ? 'L1' : 'L0');
     if (s.playing && s.followCore && s.level === 'L1') s.setLevel('L2');
     if (endReachedAt.current !== null && now - endReachedAt.current >= PLAYBACK.holdBeforeResults) {
       endReachedAt.current = null;

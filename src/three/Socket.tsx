@@ -313,7 +313,7 @@ export default function Socket() {
           toneMapped={false}
         />
       </mesh>
-      <pointLight ref={heatLight} position={[c[0], 2.4, c[2] + 0.8]} color="#ff3b1f" distance={9} decay={1.5} intensity={0} />
+      <pointLight ref={heatLight} position={[c[0], 2.4, c[2] - 1.2]} color="#ff3b1f" distance={9} decay={1.5} intensity={0} />
     </group>
   );
 }

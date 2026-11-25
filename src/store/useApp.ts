@@ -4,6 +4,7 @@ import { compareAll, presets, randomWorkload, simulate } from '../engine';
 import type { AlgorithmId, CompareResult, Process, RunResult, Settings, ValidationError } from '../engine/types';
 import type { Level } from '../scene/layout';
 import { colorForPid } from '../theme/palette';
+import { decodeShare } from './share';
 
 export interface Playhead {
   clock: number;
@@ -61,7 +62,7 @@ export interface AppState {
   setTooltip: (text: string) => void;
 }
 
-const DEFAULT_SETTINGS: Settings = { algorithm: 'fcfs', quantum: 2, preemptive: false, lowerIsHigherPriority: true };
+export const DEFAULT_SETTINGS: Settings = { algorithm: 'fcfs', quantum: 2, preemptive: false, lowerIsHigherPriority: true };
 
 /** Renumber pids 1..n and re-assign stable colours. */
 function normalise(processes: Process[]): Process[] {
@@ -73,9 +74,12 @@ const prefersReducedMotion =
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false;
 
+/** A shared link (`#w=…`) wins over the default preset on first load. */
+const shared = typeof window !== 'undefined' ? decodeShare(window.location.hash, DEFAULT_SETTINGS) : null;
+
 export const useApp = create<AppState>()((set, get) => ({
-  workload: normalise(presets[0]?.processes ?? []),
-  settings: DEFAULT_SETTINGS,
+  workload: normalise(shared?.processes ?? presets[0]?.processes ?? []),
+  settings: shared?.settings ?? DEFAULT_SETTINGS,
   run: null,
   compare: null,
   errors: [],

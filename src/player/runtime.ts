@@ -16,6 +16,8 @@ export interface Runtime {
   load: number;
   /** Seconds of wall time since start (for idle animations). */
   clock: number;
+  /** 0..1 rise of the results deck (L3). */
+  results: number;
 }
 
-export const rt: Runtime = { run: null, plan: null, sec: 0, t: 0, ihsLift: 0, load: 0, clock: 0 };
+export const rt: Runtime = { run: null, plan: null, sec: 0, t: 0, ihsLift: 0, load: 0, clock: 0, results: 0 };
