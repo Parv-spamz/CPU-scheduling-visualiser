@@ -16,7 +16,7 @@ export default function Scene() {
       className="scene"
       viewBox={`${r.x} ${r.y} ${r.width} ${r.height}`}
       preserveAspectRatio="xMidYMid meet"
-      role="img"
+      role="group"
       aria-label="Motherboard scheduling scene"
     >
       <Board />

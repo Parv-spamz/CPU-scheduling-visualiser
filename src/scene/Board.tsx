@@ -43,7 +43,6 @@ export default function Board() {
       <Readouts clock={playhead.clock} contextSwitches={playhead.contextSwitches} />
       <GanttStrip run={run} setTooltip={setTooltip} />
       <AlgorithmRing />
-      <ResultsLayer />
       <TracePulses />
       <ChipLayer
         processes={processes}
@@ -52,6 +51,8 @@ export default function Board() {
         clock={playhead.clock}
         lowerIsHigherPriority={shownSettings.lowerIsHigherPriority}
       />
+      {/* Results sit above the chips so parked chips never show through at L3. */}
+      <ResultsLayer />
     </g>
   );
 }
