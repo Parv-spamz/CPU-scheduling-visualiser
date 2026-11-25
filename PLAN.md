@@ -110,7 +110,7 @@ not rely on anything else.
 
 | Hook | Element | Animated props |
 | --- | --- | --- |
-| `[data-chip="<pid>"]` | `<g>` drawn centred on (0,0); world position via GSAP `x`,`y`,`scale` | x, y, scale, opacity |
+| `[data-chip="<pid>"]` | `<g>` drawn centred on (0,0); world position via GSAP `x`,`y`,`scale` (storage scale = `storageChipScale(burst)`) | x, y, scale, opacity |
 | `[data-chip-check="<pid>"]` | green check inside chip | opacity |
 | `[data-chip-flash="<pid>"]` | red overlay inside chip | opacity |
 | `#core-glow` | rect over the core, fill = process colour via `fill` attr | opacity, attr fill |
@@ -120,7 +120,7 @@ not rely on anything else.
 | `#quantum-ring` | circle with `pathLength=1` | strokeDashoffset |
 | `#scheduler-flash` | highlight rect on scheduler block | opacity |
 | `[data-gantt-seg="<index>"]` | rect per segment at final x, width animated | attr width (0 → final) |
-| `#gantt-cursor` | vertical line | x |
+| `#gantt-cursor` | vertical line drawn at x=0, placed by transform | x = absolute world `ganttX(t)` |
 | `[data-trace-pulse="storage-ram"|"ram-cpu"|"cpu-out"]` | small dot on trace | x, y, opacity |
 | `[data-hit="cpu"|"core"|"board"]` | click targets for the camera | — (pointer only) |
 | `[data-lod="name"|"detail"]` | label groups faded by level of detail | opacity (set by camera via CSS var) |

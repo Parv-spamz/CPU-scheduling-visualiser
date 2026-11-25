@@ -1,5 +1,5 @@
 import type { Process } from '../engine/types';
-import { CHIP_HEIGHT, CHIP_RADIUS, STORAGE_CHIP_SCALE, chipWidth, storageCellCenter } from './layout';
+import { CHIP_HEIGHT, CHIP_RADIUS, chipWidth, storageChipScale, storageCellCenter } from './layout';
 import { ATTR } from './targets';
 import { DEF, url } from './Defs';
 
@@ -28,7 +28,7 @@ export default function Chip({ process: p, index, active, best, remaining }: Pro
   const pinSpan = (pins - 1) * PIN_PITCH;
   const notchX = -w / 2 + CHIP_RADIUS + BADGE_R / 2;
   return (
-    <g {...{ [ATTR.chip]: p.pid }} transform={`translate(${c.x} ${c.y}) scale(${STORAGE_CHIP_SCALE})`}>
+    <g {...{ [ATTR.chip]: p.pid }} transform={`translate(${c.x} ${c.y}) scale(${storageChipScale(p.burst)})`}>
       {/* DIP-style pins */}
       {Array.from({ length: pins }, (_, i) => {
         const x = -pinSpan / 2 + i * PIN_PITCH;

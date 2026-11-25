@@ -26,10 +26,11 @@ export const SCHEDULER: Rect = centred(SCHEDULER_CENTER, 180, 36);
 
 export const CACHE_SIZE = 36;
 export const CACHE_INSET = 8;
-/** Four decorative cache blocks in the die corners. */
+/** Four decorative cache blocks: two in the bottom die corners, two on the die sides below the scheduler block. */
+const CACHE_SIDE_Y = SCHEDULER.y + SCHEDULER.height + CACHE_INSET;
 export const CACHE_BLOCKS: Rect[] = [
-  { x: DIE.x + CACHE_INSET, y: DIE.y + CACHE_INSET, width: CACHE_SIZE, height: CACHE_SIZE },
-  { x: DIE.x + DIE.width - CACHE_INSET - CACHE_SIZE, y: DIE.y + CACHE_INSET, width: CACHE_SIZE, height: CACHE_SIZE },
+  { x: DIE.x + CACHE_INSET, y: CACHE_SIDE_Y, width: CACHE_SIZE, height: CACHE_SIZE },
+  { x: DIE.x + DIE.width - CACHE_INSET - CACHE_SIZE, y: CACHE_SIDE_Y, width: CACHE_SIZE, height: CACHE_SIZE },
   { x: DIE.x + CACHE_INSET, y: DIE.y + DIE.height - CACHE_INSET - CACHE_SIZE, width: CACHE_SIZE, height: CACHE_SIZE },
   {
     x: DIE.x + DIE.width - CACHE_INSET - CACHE_SIZE,
@@ -66,6 +67,11 @@ export const RAM_BANK: Rect = {
 export const STORAGE: Rect = { x: 60, y: 520, width: 320, height: 240 };
 export const STORAGE_GRID = { cols: 4, rows: 3 } as const;
 export const STORAGE_CHIP_SCALE = 0.6;
+/** Storage scale for a chip: 0.6 unless the chip would overflow its grid cell. */
+export function storageChipScale(burst: number): number {
+  const cell = STORAGE.width / STORAGE_GRID.cols;
+  return Math.min(STORAGE_CHIP_SCALE, (cell * 0.9) / chipWidth(burst));
+}
 export function storageCellCenter(index: number): Point {
   const col = index % STORAGE_GRID.cols;
   const row = Math.floor(index / STORAGE_GRID.cols);
@@ -86,7 +92,8 @@ export function ganttX(t: number, t0: number, makespan: number): number {
 }
 
 // ---- Clock / counter readout near the CPU ----
-export const CLOCK_READOUT: Rect = { x: 870, y: 560, width: 160, height: 56 };
+// Right of the socket, above the storage-to-RAM trace (y 580).
+export const CLOCK_READOUT: Rect = { x: 870, y: 494, width: 160, height: 56 };
 
 // ---- Results layer (L3) ----
 export const RESULT_PANEL_SIZE = { width: 700, height: 400 } as const;
@@ -99,13 +106,9 @@ export const RESULT_PANELS: Point[] = [
 
 // ---- Algorithm ring around the socket (L1) ----
 export const ALGO_BUTTON = { width: 72, height: 26 } as const;
-/** Centres of the four selector buttons on the socket edges (fcfs, sjf, priority, rr). */
-export const ALGO_RING: Point[] = [
-  { x: SOCKET.x + SOCKET.width / 2 - 100, y: SOCKET.y - 22 },
-  { x: SOCKET.x + SOCKET.width / 2, y: SOCKET.y - 22 },
-  { x: SOCKET.x + SOCKET.width / 2 + 100, y: SOCKET.y - 22 },
-  { x: SOCKET.x + SOCKET.width / 2, y: SOCKET.y + SOCKET.height + 22 },
-];
+/** Centres of the four selector buttons (fcfs, sjf, priority, rr), in a row above the socket.
+ *  The middle gap leaves room for the CPU-to-output trace at x 700. */
+export const ALGO_RING: Point[] = [-150, -50, 50, 150].map((dx) => ({ x: CPU_CENTER.x + dx, y: SOCKET.y - 22 }));
 
 // ---- Traces (orthogonal polylines) ----
 export const BUS_X = 1060;
