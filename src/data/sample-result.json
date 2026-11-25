@@ -1,0 +1,395 @@
+{
+  "algorithm": "rr",
+  "settings": {
+    "algorithm": "rr",
+    "quantum": 2,
+    "preemptive": false,
+    "lowerIsHigherPriority": true
+  },
+  "processes": [
+    {
+      "pid": 1,
+      "name": "P1",
+      "arrival": 0,
+      "burst": 5,
+      "priority": 1,
+      "color": "#38e8ff"
+    },
+    {
+      "pid": 2,
+      "name": "P2",
+      "arrival": 1,
+      "burst": 3,
+      "priority": 2,
+      "color": "#ff5fa2"
+    },
+    {
+      "pid": 3,
+      "name": "P3",
+      "arrival": 2,
+      "burst": 1,
+      "priority": 3,
+      "color": "#ffd23f"
+    }
+  ],
+  "segments": [
+    {
+      "pid": 1,
+      "start": 0,
+      "end": 2
+    },
+    {
+      "pid": 2,
+      "start": 2,
+      "end": 4
+    },
+    {
+      "pid": 3,
+      "start": 4,
+      "end": 5
+    },
+    {
+      "pid": 1,
+      "start": 5,
+      "end": 7
+    },
+    {
+      "pid": 2,
+      "start": 7,
+      "end": 8
+    },
+    {
+      "pid": 1,
+      "start": 8,
+      "end": 9
+    }
+  ],
+  "events": [
+    {
+      "time": 0,
+      "type": "ARRIVE",
+      "pid": 1,
+      "queue": []
+    },
+    {
+      "time": 0,
+      "type": "ENQUEUE",
+      "pid": 1,
+      "queue": [
+        1
+      ]
+    },
+    {
+      "time": 0,
+      "type": "DISPATCH",
+      "pid": 1,
+      "remaining": 5,
+      "note": "front of queue: P1",
+      "queue": []
+    },
+    {
+      "time": 0,
+      "type": "RUN",
+      "pid": 1,
+      "duration": 2,
+      "remaining": 3,
+      "queue": []
+    },
+    {
+      "time": 1,
+      "type": "ARRIVE",
+      "pid": 2,
+      "queue": []
+    },
+    {
+      "time": 1,
+      "type": "ENQUEUE",
+      "pid": 2,
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 2,
+      "type": "PREEMPT",
+      "pid": 1,
+      "remaining": 3,
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 2,
+      "type": "ARRIVE",
+      "pid": 3,
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 2,
+      "type": "ENQUEUE",
+      "pid": 3,
+      "queue": [
+        2,
+        3
+      ]
+    },
+    {
+      "time": 2,
+      "type": "ENQUEUE",
+      "pid": 1,
+      "remaining": 3,
+      "queue": [
+        2,
+        3,
+        1
+      ]
+    },
+    {
+      "time": 2,
+      "type": "CONTEXT_SWITCH",
+      "pid": 2,
+      "queue": [
+        2,
+        3,
+        1
+      ]
+    },
+    {
+      "time": 2,
+      "type": "DISPATCH",
+      "pid": 2,
+      "remaining": 3,
+      "note": "front of queue: P2",
+      "queue": [
+        3,
+        1
+      ]
+    },
+    {
+      "time": 2,
+      "type": "RUN",
+      "pid": 2,
+      "duration": 2,
+      "remaining": 1,
+      "queue": [
+        3,
+        1
+      ]
+    },
+    {
+      "time": 4,
+      "type": "PREEMPT",
+      "pid": 2,
+      "remaining": 1,
+      "queue": [
+        3,
+        1
+      ]
+    },
+    {
+      "time": 4,
+      "type": "ENQUEUE",
+      "pid": 2,
+      "remaining": 1,
+      "queue": [
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "time": 4,
+      "type": "CONTEXT_SWITCH",
+      "pid": 3,
+      "queue": [
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "time": 4,
+      "type": "DISPATCH",
+      "pid": 3,
+      "remaining": 1,
+      "note": "front of queue: P3",
+      "queue": [
+        1,
+        2
+      ]
+    },
+    {
+      "time": 4,
+      "type": "RUN",
+      "pid": 3,
+      "duration": 1,
+      "remaining": 0,
+      "queue": [
+        1,
+        2
+      ]
+    },
+    {
+      "time": 5,
+      "type": "COMPLETE",
+      "pid": 3,
+      "remaining": 0,
+      "queue": [
+        1,
+        2
+      ]
+    },
+    {
+      "time": 5,
+      "type": "CONTEXT_SWITCH",
+      "pid": 1,
+      "queue": [
+        1,
+        2
+      ]
+    },
+    {
+      "time": 5,
+      "type": "DISPATCH",
+      "pid": 1,
+      "remaining": 3,
+      "note": "front of queue: P1",
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 5,
+      "type": "RUN",
+      "pid": 1,
+      "duration": 2,
+      "remaining": 1,
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 7,
+      "type": "PREEMPT",
+      "pid": 1,
+      "remaining": 1,
+      "queue": [
+        2
+      ]
+    },
+    {
+      "time": 7,
+      "type": "ENQUEUE",
+      "pid": 1,
+      "remaining": 1,
+      "queue": [
+        2,
+        1
+      ]
+    },
+    {
+      "time": 7,
+      "type": "CONTEXT_SWITCH",
+      "pid": 2,
+      "queue": [
+        2,
+        1
+      ]
+    },
+    {
+      "time": 7,
+      "type": "DISPATCH",
+      "pid": 2,
+      "remaining": 1,
+      "note": "front of queue: P2",
+      "queue": [
+        1
+      ]
+    },
+    {
+      "time": 7,
+      "type": "RUN",
+      "pid": 2,
+      "duration": 1,
+      "remaining": 0,
+      "queue": [
+        1
+      ]
+    },
+    {
+      "time": 8,
+      "type": "COMPLETE",
+      "pid": 2,
+      "remaining": 0,
+      "queue": [
+        1
+      ]
+    },
+    {
+      "time": 8,
+      "type": "CONTEXT_SWITCH",
+      "pid": 1,
+      "queue": [
+        1
+      ]
+    },
+    {
+      "time": 8,
+      "type": "DISPATCH",
+      "pid": 1,
+      "remaining": 1,
+      "note": "front of queue: P1",
+      "queue": []
+    },
+    {
+      "time": 8,
+      "type": "RUN",
+      "pid": 1,
+      "duration": 1,
+      "remaining": 0,
+      "queue": []
+    },
+    {
+      "time": 9,
+      "type": "COMPLETE",
+      "pid": 1,
+      "remaining": 0,
+      "queue": []
+    }
+  ],
+  "perProcess": [
+    {
+      "pid": 1,
+      "completion": 9,
+      "turnaround": 9,
+      "waiting": 4,
+      "response": 0
+    },
+    {
+      "pid": 2,
+      "completion": 8,
+      "turnaround": 7,
+      "waiting": 4,
+      "response": 1
+    },
+    {
+      "pid": 3,
+      "completion": 5,
+      "turnaround": 3,
+      "waiting": 2,
+      "response": 2
+    }
+  ],
+  "averages": {
+    "waiting": 3.3333333333333335,
+    "turnaround": 6.333333333333333,
+    "response": 1
+  },
+  "utilisation": 1,
+  "throughput": 0.3333333333333333,
+  "contextSwitches": 5,
+  "idleTime": 0,
+  "makespan": 9
+}

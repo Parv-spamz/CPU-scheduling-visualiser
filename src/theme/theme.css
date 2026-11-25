@@ -1,0 +1,53 @@
+:root {
+  --bg: #04110d;
+  --board: #0a2a1f;
+  --board-edge: #134a37;
+  --silk: #6fbf9c;
+  --copper: #c9874a;
+  --copper-dim: #7a5532;
+  --die: #101820;
+  --die-edge: #2f4858;
+  --socket: #1a2530;
+  --neon: #38e8ff;
+  --neon-soft: rgba(56, 232, 255, 0.35);
+  --ok: #57ff8a;
+  --warn: #ff4d5e;
+  --flash: #ffffff;
+  --text: #e6f4ee;
+  --text-dim: #8fb3a4;
+  --chrome-bg: rgba(6, 22, 17, 0.92);
+  --chrome-edge: rgba(111, 191, 156, 0.25);
+  --font-mono: ui-monospace, 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --lod-name: 0;
+  --lod-detail: 0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  display: block;
+  touch-action: none;
+  user-select: none;
+}
+
+[data-lod='name'] { opacity: var(--lod-name); transition: opacity 0.3s; }
+[data-lod='detail'] { opacity: var(--lod-detail); transition: opacity 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
