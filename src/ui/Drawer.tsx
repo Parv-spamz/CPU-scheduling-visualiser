@@ -178,6 +178,7 @@ export default function Drawer() {
         id="workload-drawer"
         className="ui-drawer ui-panel"
         data-open={open}
+        data-camera-ignore=""
         aria-labelledby={titleId}
         inert={!open}
         onKeyDown={onKeyDown}
