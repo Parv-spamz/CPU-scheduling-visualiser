@@ -1,5 +1,0 @@
-/* Pointer affordance for the camera's click targets (hooks from scene/targets.ts). */
-.scene [data-hit='cpu'],
-.scene [data-hit='core'] {
-  cursor: zoom-in;
-}

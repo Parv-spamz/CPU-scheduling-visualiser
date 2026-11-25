@@ -1,7 +1,7 @@
 // Pure camera maths and the level state machine (brief §7.5, §8.2). No DOM, no GSAP.
 import { LEVEL_RECTS, LOD, WORLD, zoomFor } from '../scene/layout';
 import type { Level, Rect } from '../scene/layout';
-import type { HitId } from '../scene/targets';
+export type HitId = 'cpu' | 'core' | 'board';
 
 /** A camera view in world units, written verbatim into the svg `viewBox`. */
 export type ViewBox = Rect;
