@@ -11,6 +11,8 @@ import Readouts from './Readouts';
 import GanttStrip from './GanttStrip';
 import TracePulses from './TracePulses';
 import ChipLayer from './ChipLayer';
+import AlgorithmRing from './AlgorithmRing';
+import ResultsLayer from './ResultsLayer';
 import './scene.css';
 
 /**
@@ -40,6 +42,8 @@ export default function Board() {
       <OutputPort />
       <Readouts clock={playhead.clock} contextSwitches={playhead.contextSwitches} />
       <GanttStrip run={run} setTooltip={setTooltip} />
+      <AlgorithmRing />
+      <ResultsLayer />
       <TracePulses />
       <ChipLayer
         processes={processes}
