@@ -65,10 +65,6 @@ function Headphones() {
         <capsuleGeometry args={[0.55, 3.4, 6, 14]} />
         <meshStandardMaterial color="#14161a" roughness={0.75} envMapIntensity={0.3} />
       </mesh>
-      <mesh position={[-6.9, 0.2, 2.2]} rotation={[Math.PI / 2, 0, 0.4]}>
-        <torusGeometry args={[2.6, 0.1, 6, 22, Math.PI * 1.25]} />
-        <meshLambertMaterial color="#14161a" />
-      </mesh>
     </group>
   );
 }
