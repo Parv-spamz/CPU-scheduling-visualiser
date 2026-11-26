@@ -14,12 +14,11 @@
 </p>
 
 <p align="center">
-  <a href="#screenshot">Screenshot</a> &bull;
+  <a href="#screenshots">Screenshots</a> &bull;
   <a href="#what-it-shows">What it shows</a> &bull;
   <a href="#algorithms">Algorithms</a> &bull;
-  <a href="#controls">Controls</a> &bull;
   <a href="#getting-started">Quickstart</a> &bull;
-  <a href="#how-it-is-built">Architecture</a> &bull;
+  <a href="#how-it-is-built">Architecture and layout</a> &bull;
   <a href="#limitations">Limitations</a>
 </p>
 
@@ -38,13 +37,23 @@ teenager's bedroom. The camera stays around the board.
 
 ---
 
-## Screenshot
+## Screenshots
 
 <p align="center">
-  <img src="assets/board.png" alt="The 3D motherboard on the bed with the Insights card and playback bar" width="900" />
+  <img src="assets/board.png" alt="The 3D motherboard on the bed" width="900" />
 </p>
 
-<p align="center"><em>The board at rest, with the Insights card comparing the four algorithms and the playback bar underneath.</em></p>
+<p align="center"><em>The whole board at rest on the bed, with the playback bar underneath.</em></p>
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/cpu.png" alt="CPU view: the socket, RAM modules and traces" width="440" /><br><em>CPU: the scheduler picks the next job from the RAM queue.</em></td>
+    <td align="center"><img src="assets/core.png" alt="Core view: one core running a job with its time-slice ring" width="440" /><br><em>Core: the running job, its remaining burst and the time-slice ring.</em></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="assets/results.png" alt="Results view: four algorithm panels with the winner highlighted" width="900" /><br><em>Results: all four algorithms ran the same jobs, and the lowest average wait wins.</em></td>
+  </tr>
+</table>
 
 ## What it shows
 
@@ -70,27 +79,6 @@ teenager's bedroom. The camera stays around the board.
 
 The engine is a pure TypeScript module with no UI dependencies, so every result can be checked with the
 unit tests in `src/engine`.
-
----
-
-## Controls
-
-| Input | Action |
-| :--- | :--- |
-| **Space** | Play or pause |
-| **← →** | Step to the previous or next event |
-| **1 – 4** | FCFS, SJF, Priority, Round Robin |
-| **[  ]** | Slower or faster playback |
-| **D** | Open or close the workload drawer |
-| **F** | Follow the running process |
-| **I** | Show or hide the insights card |
-| **R** | Reset the camera view |
-| **Esc** | Zoom out one level |
-| **?** | Show all shortcuts |
-| **Drag · wheel · right-drag** | Orbit, zoom and pan the board |
-
-The workload drawer edits arrival time, burst time, priority and quantum for each process, loads presets,
-generates random workloads, and copies a share link that restores the same run.
 
 ---
 
@@ -130,20 +118,13 @@ Debug flags for the URL: `?fx=0` turns post-processing off, `?no=bloom,ao` drops
 
 The 3D scene uses no 3D model files. The board, chips and furniture are generated in code. The bedroom
 uses six CC0 photographic textures from [Poly Haven](https://polyhaven.com), kept in `public/assets/tex/`.
-
 Quality adapts to the device: the scene picks one of three effect tiers after warm-up, from the measured
 frame time, and never flips back and forth during playback.
 
----
-
-## Repository layout
-
 ```text
 CPU-scheduling-visualiser/
-├── assets/                  # README banner and screenshot
-├── docs/
-│   ├── BRIEF.md             # Original requirements
-│   └── REDESIGN-MODULES.md  # Module map for the frontend redesign
+├── assets/                  # README banner and screenshots
+├── docs/                    # Original brief and redesign module map
 ├── public/assets/tex/       # CC0 PBR textures for the bedroom
 ├── src/
 │   ├── engine/              # Scheduling algorithms, validation, comparison
@@ -156,8 +137,6 @@ CPU-scheduling-visualiser/
 ├── PLAN.md                  # Implementation plan and work packages
 └── package.json
 ```
-
----
 
 ## Limitations
 
