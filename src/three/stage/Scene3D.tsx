@@ -191,6 +191,11 @@ function Ready({ onReady }: { onReady: () => void }) {
 export default function Scene3D() {
   const [tier, setTier] = useState(1);
   const [ready, setReady] = useState(false);
+  // Failsafe: never leave the boot screen up forever, whatever the network or GPU does.
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 12000);
+    return () => clearTimeout(t);
+  }, []);
   if (QS.get('debug') === '1') Object.assign(window, { __tier: tier });
   return (
     <div className="scene" role="group" aria-label="3D motherboard scheduling scene. Drag to rotate, scroll to zoom, right-drag to pan, R to reset the view.">

@@ -3,13 +3,12 @@
 // cached per tiling, so a set used twice is uploaded to the GPU once.
 import { useMemo } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
 
 export type PbrName = 'stretch_poplin' | 'brown_planks_03' | 'plastered_wall_02' | 'dark_wood' | 'rough_linen';
 
 export interface Pbr {
-  map: THREE.Texture;
-  normalMap: THREE.Texture;
+  map?: THREE.Texture;
+  normalMap?: THREE.Texture;
   roughnessMap?: THREE.Texture;
 }
 
@@ -63,17 +62,58 @@ function tile(key: string, src: THREE.Texture, rx: number, ry: number, srgb: boo
   return t;
 }
 
-/** One texture set, tiled rx x ry times across the UV range of the mesh it is used on. */
+const LOAD_TIMEOUT_MS = 8000;
+const loader = new THREE.TextureLoader();
+const loads = new Map<string, { status: 'pending' | 'done'; tex: THREE.Texture | null; promise: Promise<void> }>();
+
+/** Loads once per URL. Never rejects and never hangs: a failed or slow file resolves to null (plain material). */
+function load(url: string) {
+  let e = loads.get(url);
+  if (e) return e;
+  const entry: { status: 'pending' | 'done'; tex: THREE.Texture | null; promise: Promise<void> } = {
+    status: 'pending',
+    tex: null,
+    promise: Promise.resolve(),
+  };
+  entry.promise = new Promise<void>((resolve) => {
+    const finish = (t: THREE.Texture | null) => {
+      if (entry.status === 'done') return;
+      entry.status = 'done';
+      entry.tex = t;
+      resolve();
+    };
+    const timer = setTimeout(() => finish(null), LOAD_TIMEOUT_MS);
+    loader.load(
+      url,
+      (t) => {
+        clearTimeout(timer);
+        finish(t);
+      },
+      undefined,
+      () => {
+        clearTimeout(timer);
+        finish(null);
+      },
+    );
+  });
+  loads.set(url, entry);
+  e = entry;
+  return e;
+}
+
+/** One texture set, tiled rx x ry times across the UV range of the mesh it is used on. Missing files give {}. */
 export function usePbr(name: PbrName, rx: number, ry: number, gray = false): Pbr {
   const rough = HAS_ROUGH.has(name);
-  const files = [`${BASE}${name}/diff.jpg`, `${BASE}${name}/nor.jpg`, ...(rough ? [`${BASE}${name}/rough.jpg`] : [])];
-  const [d, n, r] = useTexture(files);
+  const urls = [`${BASE}${name}/diff.jpg`, `${BASE}${name}/nor.jpg`, ...(rough ? [`${BASE}${name}/rough.jpg`] : [])];
+  const entries = urls.map(load);
+  const waiting = entries.filter((e) => e.status === 'pending');
+  if (waiting.length) throw Promise.all(waiting.map((e) => e.promise));
+  const [d, n, r] = entries.map((e) => e.tex);
   return useMemo(() => {
     const k = `${name}|${rx}|${ry}|${gray}`;
-    const set: Pbr = {
-      map: tile(`${k}|d`, gray ? grayscale(name, d!) : d!, rx, ry, true),
-      normalMap: tile(`${k}|n`, n!, rx, ry, false),
-    };
+    const set: Pbr = {};
+    if (d) set.map = tile(`${k}|d`, gray ? grayscale(name, d) : d, rx, ry, true);
+    if (n) set.normalMap = tile(`${k}|n`, n, rx, ry, false);
     if (rough && r) set.roughnessMap = tile(`${k}|r`, r, rx, ry, false);
     return set;
   }, [name, rx, ry, gray, rough, d, n, r]);
