@@ -131,7 +131,7 @@ export default function CameraRig() {
       maxDistance={30}
       dollySpeed={0.6}
       dollyToCursor
-      draggingSmoothTime={0.1}
+      draggingSmoothTime={0.04}
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.TRUCK, wheel: ACTION.DOLLY }}
       touches={{ one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY_TRUCK, three: ACTION.TOUCH_TRUCK }}
     />

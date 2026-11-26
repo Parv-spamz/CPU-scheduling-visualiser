@@ -3,7 +3,7 @@
   position: fixed;
   z-index: 20;
   right: var(--ui-gap);
-  bottom: var(--ui-gap);
+  bottom: var(--ui-bot);
   width: 40px;
   height: 40px;
   padding: 0;
@@ -30,7 +30,7 @@
   position: fixed;
   z-index: 30;
   right: var(--ui-gap);
-  bottom: calc(var(--ui-gap) + 40px + 8px);
+  bottom: calc(var(--ui-bot) + 40px + 8px);
   width: 340px;
   max-width: calc(100vw - 2 * var(--ui-gap));
   padding: 16px 18px 14px;
@@ -92,9 +92,9 @@
 }
 @media (max-width: 640px) {
   .ui-help-btn {
-    bottom: calc(var(--ui-gap) + var(--ui-bar-h) + var(--ui-algo-h) + 30px);
+    bottom: calc(var(--ui-bot) + var(--ui-bar-h) + var(--ui-algo-h) + 30px);
   }
   .ui-help {
-    bottom: calc(var(--ui-gap) + var(--ui-bar-h) + var(--ui-algo-h) + 78px);
+    bottom: calc(var(--ui-bot) + var(--ui-bar-h) + var(--ui-algo-h) + 78px);
   }
 }

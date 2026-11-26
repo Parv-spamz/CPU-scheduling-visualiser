@@ -3,6 +3,7 @@
 
 :root {
   --ui-gap: 12px;
+  --ui-bot: calc(12px + env(safe-area-inset-bottom, 0px));
   --ui-bar-h: 48px;
   --ui-algo-h: 42px;
   --ui-tip-h: 28px;

@@ -98,8 +98,8 @@ function Effects({ tier }: { tier: number }) {
     !OFF.has('bloom') ? (
       <Bloom key="bloom" intensity={0.75} luminanceThreshold={0.85} luminanceSmoothing={0.25} radius={0.65} resolutionScale={tier >= 1 ? 0.4 : 0.3} levels={tier >= 1 ? 4 : 3} />
     ) : null,
-    tier >= 1 && !OFF.has('grade') ? <HueSaturation key="hs" saturation={-0.04} /> : null,
-    tier >= 1 && !OFF.has('grade') ? <BrightnessContrast key="bc" brightness={0.0} contrast={0.05} /> : null,
+    !OFF.has('grade') ? <HueSaturation key="hs" saturation={-0.04} /> : null,
+    !OFF.has('grade') ? <BrightnessContrast key="bc" brightness={0.0} contrast={0.05} /> : null,
     <ToneMapping key="tm" mode={ToneMappingMode.ACES_FILMIC} />,
     MS === 0 && !OFF.has('smaa') ? <SMAA key="smaa" /> : null,
   ].filter((e): e is ReactElement => e !== null);
@@ -177,6 +177,54 @@ function TierPicker({ ready, onTier }: { ready: boolean; onTier: (t: number) => 
   return null;
 }
 
+
+const DPR_MAX = Math.min(typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1, 1.5);
+const DPR_MIN = 0.6;
+
+/**
+ * Keeps the frame rate smooth by scaling the render resolution (not by dropping effects, so colour and glow
+ * stay the same). Steps down fast when frames run long, steps back up slowly when there is headroom, and
+ * remembers the level at which an upscale failed so it does not oscillate.
+ */
+function AdaptiveDpr({ ready, onDpr }: { ready: boolean; onDpr: (d: number) => void }) {
+  const st = useRef({ warm: 0, sum: 0, n: 0, dpr: Math.min(1, DPR_MAX), ceil: DPR_MAX, cool: 0, upped: false });
+  useFrame((_, dt) => {
+    if (!ready || OFF.has('dpr')) return;
+    const s = st.current;
+    if (s.warm < 60) {
+      s.warm++;
+      return;
+    }
+    if (s.cool > 0) {
+      s.cool--;
+      return;
+    }
+    const ms = dt * 1000;
+    if (ms > 250) return;
+    s.sum += ms;
+    s.n++;
+    if (s.n < 30) return;
+    const avg = s.sum / s.n;
+    s.sum = 0;
+    s.n = 0;
+    let next = s.dpr;
+    if (avg > 19) {
+      if (s.upped) s.ceil = Math.max(DPR_MIN, s.dpr * 0.95);
+      next = Math.max(DPR_MIN, s.dpr * (avg > 30 ? 0.8 : 0.9));
+      s.upped = false;
+    } else if (avg < 11 && s.dpr < s.ceil) {
+      next = Math.min(s.ceil, s.dpr * 1.1);
+      s.upped = true;
+    } else s.upped = false;
+    if (Math.abs(next - s.dpr) > 0.02) {
+      s.dpr = next;
+      s.cool = 45;
+      onDpr(Math.round(next * 100) / 100);
+    }
+  });
+  return null;
+}
+
 /** Signals once the scene has rendered a couple of frames (textures and fonts are in). */
 function Ready({ onReady }: { onReady: () => void }) {
   const frames = useRef(0);
@@ -191,6 +239,7 @@ function Ready({ onReady }: { onReady: () => void }) {
 export default function Scene3D() {
   const [tier, setTier] = useState(1);
   const [ready, setReady] = useState(false);
+  const [dpr, setDpr] = useState(Math.min(1, DPR_MAX));
   // Failsafe: never leave the boot screen up forever, whatever the network or GPU does.
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 12000);
@@ -202,12 +251,13 @@ export default function Scene3D() {
       <Canvas
         shadows="percentage"
         flat
-        dpr={tier === 0 ? [0.85, 1] : [1, 1.5]}
+        dpr={dpr}
         gl={{ antialias: !FX, powerPreference: 'high-performance', stencil: false, depth: true }}
         camera={{ fov: FOV, near: 0.35, far: 160, position: [-6, 13, 13] }}
         onPointerMissed={() => useApp.getState().selectPid(null)}
       >
         <TierPicker ready={ready} onTier={setTier} />
+        <AdaptiveDpr ready={ready} onDpr={setDpr} />
         <ToneMapSwitch composer={FX} />
         <Lights />
         <ShadowBaker />
