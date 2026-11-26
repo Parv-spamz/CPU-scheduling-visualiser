@@ -1,0 +1,27 @@
+/* ---- Tooltip line ---- */
+
+.ui-tooltip {
+  position: fixed;
+  z-index: 15;
+  left: 50%;
+  bottom: calc(var(--ui-gap) + var(--ui-bar-h) + var(--ui-algo-h) + 16px);
+  transform: translateX(-50%);
+  max-width: min(720px, calc(100vw - 2 * var(--ui-gap)));
+  margin: 0;
+  height: var(--ui-tip-h);
+  line-height: var(--ui-tip-h);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+  font-size: 13px;
+  border-radius: 999px;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+@media (max-width: 719.98px) {
+  .ui-tooltip {
+    font-size: 12px;
+  }
+}

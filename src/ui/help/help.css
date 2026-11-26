@@ -1,0 +1,100 @@
+/* ---- Shortcut help: a "?" button bottom right and a glass sheet above it ---- */
+.ui-help-btn {
+  position: fixed;
+  z-index: 20;
+  right: var(--ui-gap);
+  bottom: var(--ui-gap);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-dim);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 150ms ease-out, transform 100ms ease-out;
+}
+.ui-help-btn:hover,
+.ui-help-btn[aria-expanded='true'] {
+  color: var(--text);
+}
+.ui-help-btn:active {
+  transform: scale(0.96);
+}
+.ui-help-btn:focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+.ui-help {
+  position: fixed;
+  z-index: 30;
+  right: var(--ui-gap);
+  bottom: calc(var(--ui-gap) + 40px + 8px);
+  width: 340px;
+  max-width: calc(100vw - 2 * var(--ui-gap));
+  padding: 16px 18px 14px;
+  border-radius: 20px;
+  animation: ui-help-in 180ms var(--ui-ease);
+}
+.ui-help[hidden] {
+  display: none;
+}
+.ui-help h2 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.ui-help dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.ui-help dl > div {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+.ui-help dt,
+.ui-help dd {
+  margin: 0;
+}
+.ui-help dd {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.ui-help kbd {
+  display: inline-block;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+}
+@keyframes ui-help-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui-help {
+    animation: none;
+  }
+  .ui-help-btn {
+    transition: none;
+  }
+}
+@media (max-width: 640px) {
+  .ui-help-btn {
+    bottom: calc(var(--ui-gap) + var(--ui-bar-h) + var(--ui-algo-h) + 30px);
+  }
+  .ui-help {
+    bottom: calc(var(--ui-gap) + var(--ui-bar-h) + var(--ui-algo-h) + 78px);
+  }
+}

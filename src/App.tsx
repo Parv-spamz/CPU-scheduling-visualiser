@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import Scene3D from './three/Scene3D';
-import Drawer from './ui/Drawer';
-import PlaybackBar from './ui/PlaybackBar';
-import Breadcrumbs from './ui/Breadcrumbs';
-import Tooltip from './ui/Tooltip';
-import ResultsTable from './ui/ResultsTable';
-import { useKeyboard } from './ui/useKeyboard';
+import SceneGuard from './three/stage/SceneGuard';
+import Drawer from './ui/drawer/Drawer';
+import PlaybackBar from './ui/playback/PlaybackBar';
+import AlgoSwitch from './ui/algo/AlgoSwitch';
+import Breadcrumbs from './ui/breadcrumbs/Breadcrumbs';
+import Tooltip from './ui/tooltip/Tooltip';
+import Insights from './ui/insights/Insights';
+import Help from './ui/help/Help';
+import ResultsTable from './ui/a11y/ResultsTable';
+import { useKeyboard } from './ui/a11y/useKeyboard';
 import { useApp } from './store/useApp';
 import { useShareLink } from './store/useShareLink';
 
@@ -16,11 +19,14 @@ export default function App() {
   useShareLink();
   return (
     <>
-      <Scene3D />
+      <SceneGuard />
       <Breadcrumbs />
       <Drawer />
+      <AlgoSwitch />
       <PlaybackBar />
       <Tooltip />
+      <Insights />
+      <Help />
       <ResultsTable />
     </>
   );

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="240" viewBox="0 0 880 240" role="img" aria-label="CPU Scheduling Motherboard Visualizer">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1119"/>
+      <stop offset="1" stop-color="#16243a"/>
+    </linearGradient>
+    <linearGradient id="trace" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38e8ff"/>
+      <stop offset="1" stop-color="#ff5f9e"/>
+    </linearGradient>
+  </defs>
+  <rect width="880" height="240" rx="18" fill="url(#bg)"/>
+  <g fill="none" stroke="#1f3a52" stroke-width="2">
+    <path d="M40 40 H260 V80 H420 V40 H640"/>
+    <path d="M60 200 H220 V150 H380 V190 H560 V150 H840"/>
+    <path d="M700 60 V110 H820 V180"/>
+  </g>
+  <g fill="#2a4a66">
+    <circle cx="260" cy="40" r="4"/><circle cx="420" cy="80" r="4"/><circle cx="220" cy="200" r="4"/><circle cx="560" cy="190" r="4"/>
+  </g>
+  <rect x="400" y="70" width="80" height="80" rx="8" fill="#101a26" stroke="#38e8ff" stroke-width="2"/>
+  <rect x="418" y="88" width="44" height="44" rx="4" fill="#0d141d" stroke="#ffd36b" stroke-width="1.5"/>
+  <g fill="#38e8ff"><rect x="500" y="92" width="120" height="8" rx="4" opacity="0.9"/><rect x="500" y="110" width="80" height="8" rx="4" opacity="0.6"/></g>
+  <g fill="#ff5f9e"><rect x="500" y="128" width="100" height="8" rx="4" opacity="0.8"/></g>
+  <text x="60" y="110" fill="#e8eef6" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="38" font-weight="600">CPU Scheduling</text>
+  <text x="60" y="150" fill="#e8eef6" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="38" font-weight="600">Motherboard Visualizer</text>
+  <rect x="60" y="168" width="260" height="4" rx="2" fill="url(#trace)"/>
+</svg>

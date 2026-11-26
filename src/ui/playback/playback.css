@@ -1,0 +1,151 @@
+/* ---- Playback bar ---- */
+
+.ui-bar {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: var(--ui-gap);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--ui-bar-h);
+  width: min(560px, calc(100vw - 2 * var(--ui-gap)));
+  padding: 0 8px 0 4px;
+  border-radius: calc(var(--ui-bar-h) / 2);
+}
+.ui-bar .ui-icon-btn {
+  border-radius: 50%;
+}
+.ui-play {
+  color: #0d141d;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.ui-bar .ui-play:hover:not(:disabled) {
+  background: #ffffff;
+  border-color: transparent;
+}
+
+.ui-scrub-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 60px;
+  height: var(--ui-ctl);
+  margin: 0 6px;
+}
+/* Gantt chart of the run drawn as the scrubber's track: one coloured block per CPU burst. */
+.ui-gantt {
+  position: absolute;
+  inset: 13px 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+.ui-gantt span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.55);
+  opacity: 0.85;
+}
+.ui-scrub {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+    background: transparent;
+  cursor: pointer;
+}
+.ui-scrub {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ui-scrub::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+.ui-scrub::-moz-range-track {
+  height: 100%;
+  background: transparent;
+}
+/* Playhead: a bright vertical bar over the Gantt track. */
+.ui-scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 4px;
+  height: 24px;
+  margin-top: 8px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 8px rgba(255, 255, 255, 0.6);
+}
+.ui-scrub::-moz-range-thumb {
+  width: 4px;
+  height: 24px;
+  border: 0;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 8px rgba(255, 255, 255, 0.6);
+}
+.ui-scrub:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.ui-readout {
+  flex: none;
+  min-width: 64px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.ui-readout-t {
+  margin-right: 6px;
+  color: var(--text-dim);
+}
+.ui-readout-sep {
+  margin: 0 3px;
+  color: var(--text-dim);
+}
+
+.ui-speed {
+  flex: none;
+  width: 62px;
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Narrow screens: icon-only bar ---- */
+
+@media (max-width: 719.98px) {
+  .ui-bar {
+    gap: 2px;
+    padding: 0 4px;
+  }
+  .ui-scrub-wrap {
+    margin: 0 2px;
+  }
+  .ui-readout {
+    min-width: 0;
+    font-size: 12px;
+  }
+  .ui-readout-t {
+    display: none;
+  }
+  .ui-speed {
+    width: 54px;
+    margin-left: 2px;
+  }
+}
+
+/* Speed picker sits flush in the glass bar. */
+.ui-bar .ui-speed {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0 8px;
+}

@@ -4,6 +4,11 @@ Source of truth for requirements: `docs/BRIEF.md` (copy of the build brief). Thi
 work packages that several coding sub-agents can run, partly in parallel, without stepping on each other.
 Section numbers like "§7.5" refer to the brief.
 
+> **Status: complete (historical).** After Wave 2 the owner replaced the brief's 2D SVG board with a 3D
+> scene (three.js / React Three Fiber). The engine, store, level state machine and replay-plan contracts
+> below still hold; the SVG scene, GSAP timeline and viewBox camera work packages were superseded. See
+> `README.md` for the current architecture and where to make frontend changes.
+
 ---
 
 ## 1. How to use this plan (read first, every agent)
