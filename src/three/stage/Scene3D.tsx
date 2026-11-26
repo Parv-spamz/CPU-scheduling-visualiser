@@ -115,7 +115,7 @@ const OFF = new Set(typeof location === 'undefined' ? [] : (new URLSearchParams(
 
 /** Debug: `?ms=0|2|4` sets composer multisampling and `?ldr=1` uses an 8-bit buffer. */
 const QS = new URLSearchParams(typeof location === 'undefined' ? '' : location.search);
-const MS = Number(QS.get('ms') ?? 0);
+const MS = Number(QS.get('ms') ?? 4);
 const LDR = QS.get('ldr') === '1';
 
 /** `?fx=0` turns post-processing off (low-power machines, debugging). */
@@ -178,7 +178,7 @@ function TierPicker({ ready, onTier }: { ready: boolean; onTier: (t: number) => 
 }
 
 
-const DPR_MAX = Math.min(typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1, 1.5);
+const DPR_MAX = Math.min(typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1, 2);
 const DPR_MIN = 0.9;
 
 /**
