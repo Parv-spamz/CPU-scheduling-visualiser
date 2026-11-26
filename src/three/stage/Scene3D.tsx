@@ -179,7 +179,7 @@ function TierPicker({ ready, onTier }: { ready: boolean; onTier: (t: number) => 
 
 
 const DPR_MAX = Math.min(typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1, 1.5);
-const DPR_MIN = 0.6;
+const DPR_MIN = 0.9;
 
 /**
  * Keeps the frame rate smooth by scaling the render resolution (not by dropping effects, so colour and glow
@@ -187,7 +187,7 @@ const DPR_MIN = 0.6;
  * remembers the level at which an upscale failed so it does not oscillate.
  */
 function AdaptiveDpr({ ready, onDpr }: { ready: boolean; onDpr: (d: number) => void }) {
-  const st = useRef({ warm: 0, sum: 0, n: 0, dpr: Math.min(1, DPR_MAX), ceil: DPR_MAX, cool: 0, upped: false });
+  const st = useRef({ warm: 0, sum: 0, n: 0, dpr: DPR_MAX, ceil: DPR_MAX, cool: 0, upped: false });
   useFrame((_, dt) => {
     if (!ready || OFF.has('dpr')) return;
     const s = st.current;
@@ -208,11 +208,11 @@ function AdaptiveDpr({ ready, onDpr }: { ready: boolean; onDpr: (d: number) => v
     s.sum = 0;
     s.n = 0;
     let next = s.dpr;
-    if (avg > 19) {
+    if (avg > 26) {
       if (s.upped) s.ceil = Math.max(DPR_MIN, s.dpr * 0.95);
-      next = Math.max(DPR_MIN, s.dpr * (avg > 30 ? 0.8 : 0.9));
+      next = Math.max(DPR_MIN, s.dpr * (avg > 40 ? 0.85 : 0.93));
       s.upped = false;
-    } else if (avg < 11 && s.dpr < s.ceil) {
+    } else if (avg < 15 && s.dpr < s.ceil) {
       next = Math.min(s.ceil, s.dpr * 1.1);
       s.upped = true;
     } else s.upped = false;
@@ -239,7 +239,7 @@ function Ready({ onReady }: { onReady: () => void }) {
 export default function Scene3D() {
   const [tier, setTier] = useState(1);
   const [ready, setReady] = useState(false);
-  const [dpr, setDpr] = useState(Math.min(1, DPR_MAX));
+  const [dpr, setDpr] = useState(DPR_MAX);
   // Failsafe: never leave the boot screen up forever, whatever the network or GPU does.
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 12000);
