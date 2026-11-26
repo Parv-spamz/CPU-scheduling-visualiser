@@ -14,6 +14,7 @@
 </p>
 
 <p align="center">
+  <a href="#screenshot">Screenshot</a> &bull;
   <a href="#what-it-shows">What it shows</a> &bull;
   <a href="#algorithms">Algorithms</a> &bull;
   <a href="#controls">Controls</a> &bull;
@@ -36,6 +37,14 @@ The scene is a real-scale ATX motherboard rendered in 3D with React Three Fiber,
 teenager's bedroom. The camera stays around the board.
 
 ---
+
+## Screenshot
+
+<p align="center">
+  <img src="assets/board.png" alt="The 3D motherboard on the bed with the Insights card and playback bar" width="900" />
+</p>
+
+<p align="center"><em>The board at rest, with the Insights card comparing the four algorithms and the playback bar underneath.</em></p>
 
 ## What it shows
 
@@ -131,7 +140,7 @@ frame time, and never flips back and forth during playback.
 
 ```text
 CPU-scheduling-visualiser/
-├── assets/banner.svg        # README banner
+├── assets/                  # README banner and screenshot
 ├── docs/
 │   ├── BRIEF.md             # Original requirements
 │   └── REDESIGN-MODULES.md  # Module map for the frontend redesign
