@@ -224,9 +224,11 @@ export default function Scene3D() {
           <RearIO />
           <Indicators />
           <Packets />
-          <ResultsDeck />
           <Preload all />
           <Ready onReady={() => setReady(true)} />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ResultsDeck />
         </Suspense>
         <PlayerDriver />
         <CameraRig />
